@@ -1,0 +1,344 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.17134}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 // Credit to Ryan kee alot of what I learned about this program came from his tank commander program.//\par
+\par
+//This is a work in progress don't judge it to harshly please.//\par
+\par
+\par
+//The controls are the arrow keys to move him, and enter to attack. The boss doesn't do damage yet but I am working on that.//\par
+\par
+/* Images created with Bitmap Editor with Save by Troy Cook {{\field{\*\fldinst{HYPERLINK https://www.khanacademy.org/cs/bitmap-editor-with-save/6592462445346816 }}{\fldrslt{https://www.khanacademy.org/cs/bitmap-editor-with-save/6592462445346816\ul0\cf0}}}}\f0\fs22  */ \par
+frameRate(40);\par
+\par
+var xx = 10;\par
+var yy = 10;\par
+var health = 100;\par
+var villainHealth = 100;\par
+var squidHealth = 100;\par
+var potions = 0;\par
+\par
+\par
+var keys=[];\par
+var keyPressed=function()\{keys[keyCode]=true;\};\par
+var keyReleased=function()\{keys[keyCode]=false;\};\par
+ \par
+var S = \{\par
+    x : 100,\par
+    y : 100,\par
+    \};\par
+ \par
+var H = \{\par
+    x : 200,\par
+    y : 200,\par
+\};\par
+var V = \{\par
+    \par
+    x : 100,\par
+    y : 100,\par
+\};\par
+\par
+var bullets=[]; \par
+var Bullet_speed = 12.0;\par
+\par
+mouseClicked = function()\{ \par
+    bullets.push(\{  \par
+        x : xx,\par
+        y : yy\par
+    \});\par
+\};\par
+\par
+\par
+var updateBullets = function(b)\{\par
+    b = bullets;\par
+    for (var i = 0; i < b.length; i += 1)\{\par
+    \par
+        if(b[i].y < 40)\{ \par
+            b.splice(i, 1); \par
+        \}\par
+        else\{\par
+            b[i].y += Bullet_speed; \par
+        \}\par
+    \}\par
+\};\par
+\par
+var drawBullets = function(b)\{\par
+    b = bullets;\par
+strokeWeight (3); \par
+stroke (255, 255, 0);\par
+fill (255, 0, 0); \par
+\par
+    for (var i = 0; i < b.length; i++)\{ \par
+        ellipse(b[i].x, b[i].y, 7, 7);\par
+    \}\par
+    noStroke();\par
+\};\par
+\par
+var squid = function() \{\par
+   \par
+var imageDraw = function (io,x,y,w,h,e)\{e = (e === undefined)?0:e; \par
+    pushMatrix();\par
+    translate(x,y);\par
+    rectMode(CORNERS);\par
+    strokeWeight(1);\par
+    var ih = io.ia.length;\par
+    var iw = io.ia[0].length; \par
+    var ys = (e>0)?floor(h/ih):h/ih;\par
+    var xs = (e>0)?floor(w/iw):w/iw;\par
+    for (var r in io.ia)\{var sy = r*ys;\par
+    for (var c in io.ia[r])\{var sx = c*xs;var v = io.ia[r][c];\par
+    if (e > 0 && v === 0)\par
+    \{\par
+        stroke(220);\par
+        line(sx+xs/4,sy+ys/4,sx+xs*3/4,sy+ys*3/4);\par
+        line(sx+xs/4,sy+ys*3/4,sx+xs*3/4,sy+ys/4);\}\par
+        noStroke();\par
+        var fc = io.ic[v];fill(fc);\par
+        rect(round(sx),round(sy),round(sx+xs)-e,round(sy+ys)-e);\}\}\par
+        popMatrix();\par
+        rectMode(CORNER);\};\par
+var io0F12806D3A = \{\par
+    ia: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,1,59,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,59,59,59,59,59,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,1,59,58,58,58,59,59,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,59,59,58,58,58,58,59,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,59,1,1,58,1,1,59,59,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,1,59,59,1,58,58,1,59,59,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,1,0,0,1,58,58,58,58,58,58,59,59,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,1,59,1,0,0,1,58,58,58,58,58,58,59,59,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,1,59,1,1,0,0,1,59,59,58,58,58,58,59,59,59,1,0,0,0,0,0,1,0,0,0,0,0,0],[0,1,59,59,59,1,0,0,0,59,59,59,59,59,59,59,59,59,59,59,1,0,0,0,1,59,1,0,0,0,0,0],[0,1,59,59,1,1,0,0,1,59,59,59,59,59,59,59,59,59,59,59,59,1,0,0,1,59,59,1,0,1,0,0],[1,1,59,59,1,0,0,1,1,59,59,59,59,59,59,59,59,59,59,59,59,1,0,0,1,59,59,1,1,59,1,0],[1,1,59,59,1,1,1,1,59,59,59,59,59,59,59,59,59,59,59,59,59,59,1,1,1,59,59,1,59,59,1,0],[1,1,1,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,1,1,59,59,59,1,1,59,59,1,59,1,0,0],[1,59,1,1,1,59,59,59,59,59,59,59,59,59,59,59,59,59,59,1,59,59,59,59,1,59,59,1,1,0,0,0],[0,1,59,59,59,1,1,1,59,59,1,1,1,1,1,1,59,59,59,59,1,1,59,59,1,59,59,1,0,0,0,0],[0,1,59,59,59,59,59,59,59,59,1,0,0,0,0,1,1,59,59,59,59,1,1,1,1,59,1,0,0,0,0,0],[0,0,1,59,59,59,59,59,1,1,1,0,0,0,0,0,1,1,59,59,59,59,59,59,59,1,1,0,0,0,0,0],[0,0,0,1,59,59,59,59,1,0,0,0,0,0,0,0,0,1,1,1,59,59,59,1,1,1,0,0,0,0,0,0],[0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0]],ic: [0x00010101,0xFF000000,0xFF222222,0xFF444444,0xFF666666,0xFF888888,0xFFAAAAAA,0xFFBBBBBB,0xFFCCCCCC,0xFFDDDDDD,0xFFEEEEEE,0xFFFFFFFF,0xFF000088,0xFF0000BB,0xFF0000DD,0xFF0000FF,0xFF5555FF,0xFFAAAAFF,0xFF006600,0xFF008800,0xFF00BB00,0xFFAADDAA,0xFFBBFFBB,0xFFDDFFDD,0xFF006666,0xFF008888,0xFF00BBBB,0xFF00DDDD,0xFF00FFFF,0xFF88FFFF,0xFF660000,0xFF880000,0xFFBB0000,0xFFDD0000,0xFFFF0000,0xFFFF8888,0xFF660066,0xFF880088,0xFFBB00BB,0xFFDD00DD,0xFFFF00FF,0xFFFF88FF,0xFF888800,0xFFBBBB00,0xFFDDDD00,0xFFFFFF00,0xFFFFFF55,0xFFFFFFAA,0xFF663300,0xFF884400,0xFFAA5500,0xFFCC6600,0xFFEE7700,0xFFFF8800,0xFFCC9977,0xFFDDBB99,0xFFEECCBB,0xFFFFEEDD,0xFFE8A023,0xFFE0A943],gw: 32, gh: 32\};\par
+imageDraw(io0F12806D3A,S.x,S.y,50,50);\par
+/* click here, press ctrl-A then ctrl-C */\par
+/* paste it into your program with ctrl-V */\par
+/* delete these comments and everything below */\par
+if(random(0,5) && S.x <= 350) \{\par
+    S.x+=random(0,5);\par
+    \}\par
+    if(S.x >= 40) \{\par
+\par
+    S.x-=random(0,5);\par
+    \}\par
+    if(random(0,5) && S.y <= 150) \{\par
+    S.y+=random(0,5);\par
+    \}\par
+    if(S.y >= 75) \{\par
+    S.y-=random(0,5);\par
+    \}\par
+\par
+\};\par
+\par
+\par
+//This is the Hero!!\par
+var character = function()\{\par
+    \par
+    if(keys[ENTER])\{\par
+        \par
+        var imageDraw = function (io,x,y,w,h,e)\{e = (e === undefined)?0:e;\par
+            pushMatrix();\par
+            translate(x,y);\par
+            rectMode(CORNERS);\par
+            strokeWeight(1);\par
+            var ih = io.ia.length;\par
+            var iw = io.ia[0].length; \par
+            var ys = (e>0)?floor(h/ih):h/ih;var xs = (e>0)?floor(w/iw):w/iw;\par
+        for (var r in io.ia)\{var sy = r*ys;for (var c in io.ia[r])\{var sx = c*xs;\par
+            var v = io.ia[r][c];\par
+            if (e > 0 && v === 0)\{noStroke();line(sx+xs/4,sy+ys/4,sx+xs*3/4,sy+ys*3/4);line(sx+xs/4,sy+ys*3/4,sx+xs*3/4,sy+ys/4);\}noStroke();\par
+            var fc = io.ic[v];fill(fc);\par
+            rect(round(sx),round(sy),round(sx+xs)-e,round(sy+ys)-e);\}\}\par
+            popMatrix();\par
+            rectMode(CORNER);\};\par
+var io0F12796892 = \{ ia: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,30,30,30,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,30,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,30,1,56,56,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,1,1,56,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,14,14,14,14,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,31,31,30,1,14,14,14,14,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],[0,0,0,0,0,1,31,31,31,31,31,1,14,14,14,1,14,14,1,56,1,1,6,6,6,1,0,0,0,0,0,0],[0,0,0,0,0,1,31,31,1,31,31,1,14,14,1,0,1,1,0,1,0,1,1,1,1,0,0,0,0,0,0,0],[0,0,0,0,0,1,31,31,31,31,31,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,31,31,31,1,14,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,14,14,14,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,14,14,14,1,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,14,14,1,0,1,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,48,48,48,1,0,0,1,48,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,48,48,1,0,0,0,1,48,48,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],ic: [0x00010101,0xFF000000,0xFF222222,0xFF444444,0xFF666666,0xFF888888,0xFFAAAAAA,0xFFBBBBBB,0xFFCCCCCC,0xFFDDDDDD,0xFFEEEEEE,0xFFFFFFFF,0xFF000088,0xFF0000BB,0xFF0000DD,0xFF0000FF,0xFF5555FF,0xFFAAAAFF,0xFF006600,0xFF008800,0xFF00BB00,0xFFAADDAA,0xFFBBFFBB,0xFFDDFFDD,0xFF006666,0xFF008888,0xFF00BBBB,0xFF00DDDD,0xFF00FFFF,0xFF88FFFF,0xFF660000,0xFF880000,0xFFBB0000,0xFFDD0000,0xFFFF0000,0xFFFF8888,0xFF660066,0xFF880088,0xFFBB00BB,0xFFDD00DD,0xFFFF00FF,0xFFFF88FF,0xFF888800,0xFFBBBB00,0xFFDDDD00,0xFFFFFF00,0xFFFFFF55,0xFFFFFFAA,0xFF663300,0xFF884400,0xFFAA5500,0xFFCC6600,0xFFEE7700,0xFFFF8800,0xFFCC9977,0xFFDDBB99,0xFFEECCBB,0xFFFFEEDD,0xFFE8A023,0xFFE0A943],gw: 32, gh: 32\};\par
+imageDraw(io0F12796892,H.x,H.y,50,50);\par
+\par
+\par
+if(keys[UP] && H.y >= -7) \{\par
+        H.y -= 1;\par
+    \}\par
+    if(keys[DOWN] && H.y <= 278) \{\par
+        H.y += 1;\par
+    \}\par
+    \par
+    if(keys[LEFT] && H.x >= 5) \{\par
+        H.x -= 1;\par
+    \} \par
+    if(keys[RIGHT] && H.x <= 360) \{\par
+\par
+        H.x += 1;\par
+    \}\par
+    if (abs(H.speed) > 0) \{\par
+        H.x += sin(45) * H.speed;\par
+\tab\tab H.y -= cos(45) * H.speed;\par
+\tab\}\par
+    \}\par
+    else \{\par
+        \par
+            \par
+        var imageDraw = function (io,x,y,w,h,e)\{e = (e === undefined)?0:e;\par
+        pushMatrix();\par
+        translate(x,y);\par
+        rectMode(CORNERS);\par
+        strokeWeight(1);\par
+        var ih = io.ia.length;\par
+        var iw = io.ia[0].length; \par
+        var ys = (e>0)?floor(h/ih):h/ih;\par
+        var xs = (e>0)?floor(w/iw):w/iw;\par
+        for (var r in io.ia)\{var sy = r*ys;for (var c in io.ia[r])\{\par
+            var sx = c*xs;\par
+            var v = io.ia[r][c];\par
+        if (e > 0 && v === 0)\{noStroke();\par
+            line(sx+xs/4,sy+ys/4,sx+xs*3/4,sy+ys*3/4);\par
+            line(sx+xs/4,sy+ys*3/4,sx+xs*3/4,sy+ys/4);\}\par
+            noStroke();\par
+        var fc = io.ic[v];\par
+            fill(fc);\par
+            rect(round(sx),round(sy),round(sx+xs)-e,round(sy+ys)-e);\}\}\par
+            popMatrix();\par
+            rectMode(CORNER);\par
+        \};\par
+var io0F127967AF = \{ia: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,30,30,30,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,30,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,30,1,56,56,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,1,1,56,1,0,1,6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,14,14,14,14,1,1,6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,31,31,30,1,14,14,14,14,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,31,31,31,31,31,1,14,14,14,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,31,31,1,31,31,1,14,14,1,56,56,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,31,31,31,31,31,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,31,31,31,1,14,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,14,14,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,14,14,14,1,14,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,14,14,1,0,1,14,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,48,48,48,1,0,1,48,48,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,48,48,1,0,0,1,48,48,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],ic: [0x00010101,0xFF000000,0xFF222222,0xFF444444,0xFF666666,0xFF888888,0xFFAAAAAA,0xFFBBBBBB,0xFFCCCCCC,0xFFDDDDDD,0xFFEEEEEE,0xFFFFFFFF,0xFF000088,0xFF0000BB,0xFF0000DD,0xFF0000FF,0xFF5555FF,0xFFAAAAFF,0xFF006600,0xFF008800,0xFF00BB00,0xFFAADDAA,0xFFBBFFBB,0xFFDDFFDD,0xFF006666,0xFF008888,0xFF00BBBB,0xFF00DDDD,0xFF00FFFF,0xFF88FFFF,0xFF660000,0xFF880000,0xFFBB0000,0xFFDD0000,0xFFFF0000,0xFFFF8888,0xFF660066,0xFF880088,0xFFBB00BB,0xFFDD00DD,0xFFFF00FF,0xFFFF88FF,0xFF888800,0xFFBBBB00,0xFFDDDD00,0xFFFFFF00,0xFFFFFF55,0xFFFFFFAA,0xFF663300,0xFF884400,0xFFAA5500,0xFFCC6600,0xFFEE7700,0xFFFF8800,0xFFCC9977,0xFFDDBB99,0xFFEECCBB,0xFFFFEEDD,0xFFE8A023,0xFFE0A943],gw: 32, gh: 32\};\par
+imageDraw(io0F127967AF,H.x, H.y,50,50);\par
+\par
+\par
+\par
+    if(keys[UP] && H.y >= -7) \{\par
+        H.y -= 1;\par
+    \}\par
+    if(keys[DOWN] && H.y <= 278) \{\par
+        H.y += 1;\par
+    \}\par
+    \par
+    if(keys[LEFT] && H.x >= 5) \{\par
+        H.x -= 1;\par
+    \} \par
+    if(keys[RIGHT] && H.x <= 360) \{\par
+\par
+        H.x += 1;\par
+    \}\par
+    if (abs(H.speed) > 0) \{\par
+        H.x += sin(45) * H.speed;\par
+\tab\tab H.y -= cos(45) * H.speed;\par
+\tab\}\par
+\}\par
+\};\par
+\par
+//This function is going to allow the villian //to shoot balls of magic randomly at the Hero\par
+\par
+//This is the bottom status bar its currently //inactive.   \par
+var statbar = function()\{\par
+    \par
+    fill(0, 77, 255);\par
+    rect(0, 350, 400, 3);\par
+    fill(71, 63, 63);\par
+    rect(0, 353, 400, 47);\par
+    fill(255, 0, 119);\par
+    rect(20, 365, 100, 15);\par
+    fill(189, 200, 212);\par
+    rect(20, 365, health, 15);\par
+    \par
+    fill(240, 232, 232);\par
+    rect(274, 364, 103, 28);\par
+    fill(5, 5, 5);\par
+    rect(276, 366, 99, 24);\par
+    text("Hero:" + health, 25, 377);\par
+    fill(255, 0, 0);\par
+    triangle(280, 387, 285, 379, 290, 387);\par
+    rect( 284, 375, 3, 10);\par
+    fill(247, 244, 244);\par
+    text("Potions = " + potions, 300, 385);\par
+    fill(250, 250, 247);\par
+    rect( 284, 375, 3, 2);\par
+    fill(102, 91, 61);\par
+    rect( 284, 373, 3, 1);\par
+    \};\par
+\par
+ //This is the Villian!!\par
+var villain = function()\{\par
+    var x = xx;\par
+    var y = yy;\par
+    \par
+var imageDraw = function (io,x,y,w,h,e)\{e = (e === undefined)?0:e; \par
+        pushMatrix();\par
+        translate(x,y);\par
+        rectMode(CORNERS);\par
+        strokeWeight(1);\par
+        var ih = io.ia.length;\par
+        var iw = io.ia[0].length; \par
+        var ys = (e>0)?floor(h/ih):h/ih;var xs = (e>0)?floor(w/iw):w/iw;\par
+    for (var r in io.ia)\{var sy = r*ys;\par
+    for (var c in io.ia[r])\{var sx = c*xs;var v = io.ia[r][c];\par
+    if (e > 0 && v === 0)\{noStroke();line(sx+xs/4,sy+ys/4,sx+xs*3/4,sy+ys*3/4);line(sx+xs/4,sy+ys*3/4,sx+xs*3/4,sy+ys/4);\}noStroke();var fc = io.ic[v];fill(fc);rect(round(sx),round(sy),round(sx+xs)-e,round(sy+ys)-e);\}\}\par
+        popMatrix();\par
+        rectMode(CORNER);\};\par
+var io0F12797ACD = \{ ia: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,37,37,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,37,37,37,1,1,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,37,37,37,37,37,37,1,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,56,1,56,1,56,56,0,0,0,0,0,0,0,0,0,0,0],[46,46,46,0,0,0,0,0,0,0,0,0,0,0,0,0,56,56,56,56,0,0,0,0,0,0,0,0,0,0,0,0],[46,46,46,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],[46,46,17,0,0,0,0,0,0,0,0,0,1,1,1,1,38,38,38,38,38,38,38,38,1,0,0,0,0,0,0,0],[0,17,17,0,0,0,0,0,0,0,1,1,38,38,38,38,38,38,38,38,38,38,38,38,1,0,0,0,0,0,0,0],[0,0,17,17,0,0,0,0,0,0,1,38,1,38,38,38,38,38,38,38,38,38,38,38,1,0,0,0,0,0,0,0],[0,0,17,17,0,0,0,0,0,1,1,38,1,38,38,38,38,38,38,38,38,38,38,38,38,1,0,0,0,0,0,0],[0,0,0,17,17,0,0,0,0,1,38,38,1,38,38,38,38,38,38,38,38,38,1,38,38,1,0,0,0,0,0,0],[0,0,0,0,17,17,0,0,0,1,38,38,1,38,38,38,38,38,38,38,38,38,1,38,38,1,0,0,0,0,0,0],[0,0,0,0,17,17,0,0,1,1,38,38,1,38,38,38,38,38,38,38,38,38,1,38,38,1,37,0,0,0,0,0],[0,0,0,0,0,17,17,1,1,38,38,38,1,38,38,38,38,38,38,38,38,38,1,38,1,1,37,0,0,0,0,0],[0,0,0,0,0,17,17,1,38,38,38,1,37,1,38,38,38,38,38,38,38,1,38,38,1,37,37,0,0,0,0,0],[0,0,0,0,0,0,1,38,38,1,1,37,37,1,38,38,38,38,38,38,38,1,1,1,1,37,37,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,17,37,37,37,37,1,38,38,38,38,38,1,37,37,37,37,37,37,0,0,0,0,0],[0,0,0,0,0,0,0,37,17,17,37,37,37,37,37,1,1,1,1,1,37,37,37,37,37,37,37,37,0,0,0,0],[0,0,0,0,0,0,0,37,37,17,37,37,37,37,1,38,38,38,38,1,37,37,37,37,37,37,37,37,0,0,0,0],[0,0,0,0,0,0,37,37,37,17,17,37,37,1,38,38,38,38,38,38,1,37,37,37,37,37,37,37,0,0,0,0],[0,0,0,0,0,37,37,37,37,17,17,17,1,38,38,38,38,38,38,38,38,1,37,37,37,37,37,37,0,0,0,0],[0,0,0,0,0,37,37,37,37,37,17,17,1,38,38,38,1,38,38,38,38,1,37,37,37,37,37,37,0,0,0,0],[0,0,0,0,0,37,37,37,37,37,37,37,1,38,38,38,1,38,38,38,38,1,37,37,37,37,37,37,0,0,0,0],[0,0,0,0,37,37,37,37,37,37,37,37,1,38,38,38,1,38,38,38,38,1,37,37,37,37,37,37,37,0,0,0],[0,0,0,0,37,37,37,37,37,37,37,37,1,38,38,38,1,38,38,38,38,1,37,37,37,37,37,37,37,0,0,0],[0,0,0,37,37,37,37,37,37,37,37,37,1,38,38,38,1,38,38,38,38,1,37,37,37,37,37,37,37,37,0,0],[0,0,0,37,37,37,37,37,37,37,37,37,1,17,17,17,1,17,17,17,17,1,37,37,37,37,37,37,37,37,0,0],[0,0,0,37,37,37,37,37,37,37,37,1,17,17,17,1,17,17,17,17,1,37,37,37,37,37,37,37,37,37,0,0],[0,0,0,0,0,0,0,0,0,0,1,17,17,17,1,17,17,17,17,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]],ic: [0x00010101,0xFF000000,0xFF222222,0xFF444444,0xFF666666,0xFF888888,0xFFAAAAAA,0xFFBBBBBB,0xFFCCCCCC,0xFFDDDDDD,0xFFEEEEEE,0xFFFFFFFF,0xFF000088,0xFF0000BB,0xFF0000DD,0xFF0000FF,0xFF5555FF,0xFFAAAAFF,0xFF006600,0xFF008800,0xFF00BB00,0xFFAADDAA,0xFFBBFFBB,0xFFDDFFDD,0xFF006666,0xFF008888,0xFF00BBBB,0xFF00DDDD,0xFF00FFFF,0xFF88FFFF,0xFF660000,0xFF880000,0xFFBB0000,0xFFDD0000,0xFFFF0000,0xFFFF8888,0xFF660066,0xFF880088,0xFFBB00BB,0xFFDD00DD,0xFFFF00FF,0xFFFF88FF,0xFF888800,0xFFBBBB00,0xFFDDDD00,0xFFFFFF00,0xFFFFFF55,0xFFFFFFAA,0xFF663300,0xFF884400,0xFFAA5500,0xFFCC6600,0xFFEE7700,0xFFFF8800,0xFFCC9977,0xFFDDBB99,0xFFEECCBB,0xFFFFEEDD,0xFFE8A023,0xFFE0A943],gw: 32, gh: 32\};\par
+imageDraw(io0F12797ACD,xx,yy,50,50);\par
+\par
+\par
+    if(random(0,5) && x <= 350) \{\par
+    xx+=random(0,5);\par
+    \}\par
+    if(x >= 40) \{\par
+\par
+    xx-=random(0,5);\par
+    \}\par
+    if(random(0,5) && y <= 150) \{\par
+    yy+=random(0,5);\par
+    \}\par
+    if(y >= 75) \{\par
+    yy-=random(0,5);\par
+    \}\par
+\par
+    \};\par
+\par
+\par
+\par
+var draw = function() \{\par
+        background(117, 102, 102);\par
+        \par
+        //tiles//\par
+        fill(240, 237, 237);\par
+        for(var x = 10; x < 390; x += 20) \{\par
+    for(var y = 10; y < 330; y += 20) \{\par
+        rect(x, y, 20, 20);\par
+          \}\par
+\}\par
+        character();\par
+        statbar();\par
+       if(villainHealth > 0) \{\par
+           villain();\par
+           //updateBullets();\par
+            //drawBullets();\par
+            updateBullets();\par
+            drawBullets();\par
+       \}\par
+        else\{\par
+            if(squidHealth > 0) \{\par
+            squid();\par
+        \}\par
+        \}\par
+        \par
+        \par
+if(H.x >= xx - 25 && H.x <= xx +15 && H.y <= yy + 10 && H.y >= yy - 25 && keys[ENTER]) \{\par
+    villainHealth -= 0.25;\par
+    if(villainHealth === 0)\par
+    \{\par
+   \par
+    \}\par
+    \}\par
+if(H.x >= S.x - 25 && H.x <= S.x +15 && H.y <= S.y + 10 && H.y >= S.y - 25 && keys[ENTER]) \{\par
+    squidHealth -= 0.25;\par
+    if(squidHealth === 0)\par
+    \{\par
+   \par
+    \}\par
+        \par
+    \}\par
+    if(bullets === H.x + 5 && H.x - 5 && H.y + 5 && H.y - 5) \{\par
+        health -= 1;\par
+    \}\par
+       if(villainHealth === 75) \{\par
+    potions = potions + 1;\par
+\}\par
+if(villainHealth === 50) \{\par
+    potions = potions + 1;\par
+\}\par
+if(villainHealth === 30) \{\par
+    potions = potions + 1;\par
+\}\par
+       \par
+       \par
+\};\par
+}
+ 
